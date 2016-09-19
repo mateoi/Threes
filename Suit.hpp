@@ -3,6 +3,7 @@
 
 #include <string>
 
+/** An enum of the four suits in the Spanish deck */
 enum Suit {SPADES, CLUBS, COINS, CUPS};
 std::string suit_symbol(Suit suit);
 

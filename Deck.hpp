@@ -8,6 +8,9 @@
 
 #define NUMBER_OF_DECKS 2
 
+/**
+ * Generates a randomly shuffled deck
+ */
 std::vector<Card*>* generateDeck();
 
 #endif

@@ -1,6 +1,10 @@
 #include "Deck.hpp"
 using namespace std;
 
+/**
+ * Creates an unshuffled deck with numbers from 1 to 12.
+ * There are NUMBER_OF_DECKS copies in the produced deck.
+ */
 vector<Card*>* initDeck() {
     vector<Card*>* deck = new vector<Card*> (NUMBER_OF_DECKS * 12 * 4);
     for (int d = 0; d < NUMBER_OF_DECKS; d++) {
@@ -15,6 +19,9 @@ vector<Card*>* initDeck() {
     return deck;
 }
 
+/**
+ * Randomply shuffles the given deck using the Fisher-Yates shuffle algorithm
+ */
 void shuffleDeck(vector<Card*>* deck) {
     random_device random;
     for (int i = deck->size() - 1; i > 0; i--) {
@@ -26,6 +33,9 @@ void shuffleDeck(vector<Card*>* deck) {
     }
 }
 
+/**
+ * Generates a randomly shuffled deck
+ */
 vector<Card*>* generateDeck() {
     vector<Card*>* deck = initDeck();
     shuffleDeck(deck);

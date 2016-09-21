@@ -19,6 +19,14 @@ vector<Card*>* initDeck() {
     return deck;
 }
 
+void moveNelements(vector<Card*>* from, vector<Card*>* to, int n) {
+    if (!from->empty() && n > 0) {
+        to->push_back(from->back());
+        from->pop_back();
+        moveNelements(from, to, n-1);
+    }
+}
+
 /**
  * Randomply shuffles the given deck using the Fisher-Yates shuffle algorithm
  */

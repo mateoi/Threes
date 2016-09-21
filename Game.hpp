@@ -3,6 +3,8 @@
 
 #include "Card.hpp"
 #include "Deck.hpp"
+#include "Input.hpp"
+#include "Player.hpp"
 #include <iostream>
 
 

@@ -13,17 +13,27 @@ int askNumberOfPlayers() {
     return userInput(2, 5);
 }
 
+/**
+ * Draws a given amount of cards from the stack and creates a new vector of cards
+ */
 vector<Card*>* newCards(int amount) {
     vector<Card*>* vec = new vector<Card*>();
     moveNelements(pile, vec, amount);
     return vec;
 }
 
+/**
+ * Removes all the threes from the top of the pile
+ */
 void removeThrees() {
-    while (!stack->empty() && stack->back()->getValue() == 3)
-        stack->pop_back();
+    while (!pile->empty() && pile->back()->getValue() == 3)
+        pile->pop_back();
 }
 
+/**
+ * Checks whether the topmost cards in the pile form a poker
+ * (four different suits of the same value)
+ */
 bool checkPoker(int lastValue) {
     int value = 0;
     int index = pile->size() - 1;
@@ -34,6 +44,9 @@ bool checkPoker(int lastValue) {
     return value == 0xF;  // 1111 in binary
 } 
 
+/**
+ * Checks whether the pile should be discarded if there is a poker or a knave on top of the pile.
+ */
 bool discard() {
     if (!pile->empty()) {
         int lastValue = stack->back()->getValue();
@@ -44,6 +57,9 @@ bool discard() {
     return false;
 }
 
+/**
+ * Main game loop. Goes through each player and handles discards and other game events
+ */
 int playGame(int numberOfPlayers) {
     int turn = 0;
     while (true) {

@@ -2,6 +2,9 @@
 
 using namespace std;
 
+/**
+ * Asks the user to input a number between min and max.
+ */
 int userInput(int min, int max) {
     int result = min - 1;
     string input;

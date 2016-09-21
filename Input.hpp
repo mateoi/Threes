@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 
-/** Asks the user to enter a number between min and max, inclusive) */
+/** Asks the user to enter a number between min and max, inclusive */
 int userInput(int min, int max);
 
 #endif

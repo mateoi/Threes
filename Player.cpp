@@ -27,19 +27,31 @@ void Player::displayHand() {
     cout << endl;
 }
 
+/**
+ * Asks the user to play and returns the chosen cards
+ */
 vector<Card*>* Player::move(Card* onTop) {
     displayHand();
     return new vector<Card*>();
 }
 
+/**
+ * Checks whether the player has won the game
+ */
 bool Player::hasWon() {
     return hand->empty() && faceUp->empty() && faceDown->empty();
 }
 
+/**
+ * Adds the given cards to the player's hand
+ */
 void Player::addCards(std::vector<Card*>* cards) {
     moveNelements(cards, hand, cards->size());
 }
 
+/**
+ * Draws cards from the given stack until the user has 3 cards or the stack is empty
+ */
 void Player::draw(vector<Card*>* stack) {
     moveNelements(stack, hand, 3 - hand->size());
 }

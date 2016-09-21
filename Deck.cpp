@@ -19,6 +19,9 @@ vector<Card*>* initDeck() {
     return deck;
 }
 
+/**
+ * Moves n cards from the from vector to the to vector.
+ */
 void moveNelements(vector<Card*>* from, vector<Card*>* to, int n) {
     if (!from->empty() && n > 0) {
         to->push_back(from->back());

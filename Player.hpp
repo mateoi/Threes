@@ -27,6 +27,7 @@ class Player {
          */
         std::vector<Card*>* move(Card* onTop);
 
+        /** Draw cards from the pile */
         void draw(std::vector<Card*>* stack);
 
         /** Adds the given cards to the user's hand */

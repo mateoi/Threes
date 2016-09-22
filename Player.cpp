@@ -24,6 +24,15 @@ void displayCards(vector<Card*>* cards, bool showIndex) {
     cout << "└────┴──────┘" << endl;
 }
 
+void Player::showVisibleCards() {
+    for (Card* card : *faceUp) {
+        cout << card->toString();
+        cout << (card->getValue() < 10 ? " " : "");
+    }
+    for (unsigned int i = 0; i < 3 - faceUp->size(); i++)
+        cout << "    ";
+}
+
 /**
  * Display's all the player's cards
  */
@@ -38,7 +47,7 @@ void Player::displayHand() {
             cout << " " << i+1 << ": ";
         cout << "XX ";
     }
-    cout << endl;
+    cout << endl << endl;
 }
 
 /**
@@ -117,6 +126,7 @@ vector<Card*>* Player::move(Card* onTop) {
         }
         pauseProgram();
     } else {
+        printPlayerInfo(number);
         cout << "Enter the cards you want to play, or 0 to take all the cards: ";
         vector<int>* move = userMultiInput(0, inPlay->size());
         while (!isValidMove(getCards(move, inPlay), onTop)) {

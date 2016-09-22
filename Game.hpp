@@ -11,5 +11,6 @@
 
 /** Checks whether the given value can be played over the value currently on top. */
 bool canPlay(unsigned short value, unsigned short onTop);
-
+/** Prints info about all the players */
+void printPlayerInfo(int turn);
 #endif

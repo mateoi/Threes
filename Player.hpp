@@ -17,7 +17,7 @@ class Player {
         std::vector<Card*>* faceDown; /** The cards on the table that are face down */
 
         void displayHand(); /** Shows the player's hand on screen */
-        int askInput(); /** Asks the user to make a move */
+        int number;
     public:
         bool hasWon(); /** Checks if the player is out of cards */
 
@@ -34,7 +34,16 @@ class Player {
         /** Adds the given cards to the user's hand */
         void addCards(std::vector<Card*>* cards);
 
-        Player(std::vector<Card*>* h, std::vector<Card*>* u, std::vector<Card*>* d): hand(h), faceUp(u), faceDown(d) {}
+        /** The number of cards in the player's hand */
+        inline int handCards() {return hand->size();}
+
+        /** The number of hidden cards */
+        inline int faceDownCards() {return faceDown->size();}
+
+        /** Show the player's visible cards */
+        void showVisibleCards();
+
+        Player(std::vector<Card*>* h, std::vector<Card*>* u, std::vector<Card*>* d, int n): hand(h), faceUp(u), faceDown(d), number(n) {}
 };
 
 

@@ -4,6 +4,7 @@ using namespace std;
 vector<Card*>* pile = new vector<Card*>();
 vector<Card*>* stack = generateDeck();
 Player** players;
+int numberOfPlayers;
 
 /**
  * Ask how many players will play the game
@@ -61,8 +62,6 @@ bool discard() {
  * Prints information about the game's current status
  */
 void printStatus(Card* onTop) {
-    cout << "There are " << stack->size() << " card(s) left in the stack." << endl;
-    cout << "There are " << pile->size() << " card(s) in the pile." << endl;
     if (onTop)
         cout << "The card on top is " << onTop->toString() << endl << endl;
     else
@@ -70,22 +69,62 @@ void printStatus(Card* onTop) {
 }
 
 /**
- * Print info about a new turn
+ * Clears the screen
  */
-void printNewTurn(int turn) {
+void clearScreen() {
     if (!cur_term) {
         int result;
         setupterm(NULL, STDOUT_FILENO, &result);
         if (result <= 0) return;
     }
     putp(tigetstr("clear"));
+}
+
+/**
+ * Print information about the players
+ */
+void printPlayerInfo(int turn) {
+    cout << "There are " << stack->size() << " card(s) left in the stack." << endl;
+    cout << "There are " << pile->size() << " card(s) in the pile." << endl << endl;
+    cout << "  ";
+    string spaces = "        ";
+    for (int i = 0; i < numberOfPlayers; i++) {
+        if (i == turn)
+            cout << "  You   " << spaces;
+        else
+            cout << "Player " << i+1 << spaces;
+    }
+    cout << endl << "  ";
+    for (int i = 0; i < numberOfPlayers; i++)
+        cout << "--------" << spaces;
+    cout << endl << "  ";
+    for (int i = 0; i < numberOfPlayers; i++) {
+        int hand = players[i]->handCards();
+        cout << "Hand: " << (hand < 10 ? " " : "") << hand << spaces;
+    }
+    cout << endl << "  ";
+    for (int i = 0; i < numberOfPlayers; i++)
+        cout << "Hidden:" << players[i]->faceDownCards() << spaces;
+    cout << endl << " ";
+    for (int i = 0; i < numberOfPlayers; i++) {
+        players[i]->showVisibleCards();
+        cout << "    ";
+    }
+    cout << endl << endl;
+}
+
+/**
+ * Print info about a new turn
+ */
+void printNewTurn(int turn) {
+    clearScreen();
     cout << "Player " << turn+1 << "'s turn." << endl;
 }
 
 /**
  * Main game loop. Goes through each player and handles discards and other game events
  */
-int playGame(int numberOfPlayers) {
+int playGame() {
     int turn = 0;
     printNewTurn(0);
     while (true) {
@@ -111,6 +150,7 @@ int playGame(int numberOfPlayers) {
         delete played;
         ++turn %= numberOfPlayers;
         printNewTurn(turn);
+        pauseProgram();
     }
 }
 
@@ -130,11 +170,11 @@ bool canPlay(unsigned short value, unsigned short onTop) {
 }
 
 int main() {
-    int numberOfPlayers = askNumberOfPlayers();
+    numberOfPlayers = askNumberOfPlayers();
     players = new Player*[numberOfPlayers];
     for (int i = 0; i < numberOfPlayers; i++) {
-        players[i] = new Player(newCards(3), newCards(3), newCards(3));
+        players[i] = new Player(newCards(3), newCards(3), newCards(3), i);
     }
-    int winner = playGame(numberOfPlayers);
+    int winner = playGame();
     cout << "Game over! Player " << winner+1 << " is the winner!" << endl;
 }

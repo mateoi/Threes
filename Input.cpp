@@ -17,3 +17,38 @@ int userInput(int min, int max) {
     }
     return result;
 }
+
+vector<int>* userMultiInput(int min, int max) {
+    vector<int>* result = new vector<int>();
+    string input;
+    while (getline(cin, input)) {
+        result->clear();
+        stringstream stream(input);
+        string section;
+        int item = min - 1;
+        bool done = false;
+        while (getline(stream, section, ' ')) {
+            if (stringstream(section) >> item) {
+                if (item >= min && item <= max) {
+                    result->push_back(item);
+                    done = true;
+                    continue;
+                }
+            }
+            done = false;
+            break;
+        }
+        if (done) {
+            break;
+        } else {
+            cout << "Please enter numbers between " << min << " and " << max << "." << endl;
+        }
+    }
+    return result;
+}
+
+/* Pause the program and wait for input */
+void pauseProgram() {
+    cin.get();
+}
+

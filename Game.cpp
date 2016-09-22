@@ -1,7 +1,7 @@
 #include "Game.hpp"
 using namespace std;
 
-vector<Card*>* pile;
+vector<Card*>* pile = new vector<Card*>();
 vector<Card*>* stack = generateDeck();
 Player** players;
 
@@ -18,7 +18,7 @@ int askNumberOfPlayers() {
  */
 vector<Card*>* newCards(int amount) {
     vector<Card*>* vec = new vector<Card*>();
-    moveNelements(pile, vec, amount);
+    moveNelements(stack, vec, amount);
     return vec;
 }
 
@@ -49,7 +49,7 @@ bool checkPoker(int lastValue) {
  */
 bool discard() {
     if (!pile->empty()) {
-        int lastValue = stack->back()->getValue();
+        int lastValue = pile->back()->getValue();
         bool isKnave = lastValue == 10;
         bool isPoker = checkPoker(lastValue);
         return isKnave || isPoker;
@@ -58,14 +58,41 @@ bool discard() {
 }
 
 /**
+ * Prints information about the game's current status
+ */
+void printStatus(Card* onTop) {
+    cout << "There are " << stack->size() << " card(s) left in the stack." << endl;
+    cout << "There are " << pile->size() << " card(s) in the pile." << endl;
+    if (onTop)
+        cout << "The card on top is " << onTop->toString() << endl << endl;
+    else
+        cout << "The pile is empty." << endl << endl;
+}
+
+/**
+ * Print info about a new turn
+ */
+void printNewTurn(int turn) {
+    if (!cur_term) {
+        int result;
+        setupterm(NULL, STDOUT_FILENO, &result);
+        if (result <= 0) return;
+    }
+    putp(tigetstr("clear"));
+    cout << "Player " << turn+1 << "'s turn." << endl;
+}
+
+/**
  * Main game loop. Goes through each player and handles discards and other game events
  */
 int playGame(int numberOfPlayers) {
     int turn = 0;
+    printNewTurn(0);
     while (true) {
         Player p = *(players[turn]);
-        cout << "Player " << turn << "'s turn." << endl << endl;
-        vector<Card*>* played = p.move(pile->empty() ? nullptr : pile->back());
+        Card* onTop = pile->empty() ? nullptr : pile->back();
+        printStatus(onTop);
+        vector<Card*>* played = p.move(onTop);
         if (p.hasWon()) return turn;
         if (played->empty()) {
             removeThrees();
@@ -74,12 +101,32 @@ int playGame(int numberOfPlayers) {
             moveNelements(played, pile, played->size());
             p.draw(stack);
             if (discard()) {
+                cout << "Discard!" << endl;
+                cout << "---------------------------------------------" << endl;
                 pile->clear();
+                delete played;
                 continue; // If the play is a discard, the player repeats their turn.
             }
         }
+        delete played;
         ++turn %= numberOfPlayers;
+        printNewTurn(turn);
     }
+}
+
+/**
+ * Checks if the given card value is a valid card to play over the card
+ * currently on top of the pile
+ */
+bool canPlay(unsigned short value, unsigned short onTop) {
+    switch (onTop) {
+    case 1: return (value >= 1 && value <= 3) || value == 10;
+    case 2: return true;
+    case 3: return value == 3;
+    case 7: return (value >= 2 && value <= 7) || value == 10;
+    case 10: return false;  // This case shouldn't really happen.
+    default: return value >= onTop || (value >= 1 && value <= 3) || value == 10;
+    };
 }
 
 int main() {
@@ -89,5 +136,5 @@ int main() {
         players[i] = new Player(newCards(3), newCards(3), newCards(3));
     }
     int winner = playGame(numberOfPlayers);
-    cout << "Game over! Player " << winner << " is the winner!" << endl;
+    cout << "Game over! Player " << winner+1 << " is the winner!" << endl;
 }

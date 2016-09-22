@@ -6,7 +6,7 @@
 
 #include "Card.hpp"
 
-#define NUMBER_OF_DECKS 2
+#define NUMBER_OF_DECKS 1
 
 /**
  * Generates a randomly shuffled deck

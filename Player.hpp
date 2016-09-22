@@ -3,6 +3,7 @@
 
 #include "Card.hpp"
 #include "Deck.hpp"
+#include "Game.hpp"
 #include <vector>
 
 

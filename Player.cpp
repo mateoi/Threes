@@ -7,6 +7,7 @@ using namespace std;
  * Displays a list of cards
  */
 void displayCards(vector<Card*>* cards, bool showIndex) {
+    sortCards(cards);
     int i = 1;
     cout << "┌────┬──────┐" << endl;
     for (Card* card : *cards) {
